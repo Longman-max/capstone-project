@@ -152,8 +152,8 @@ This project was developed as a **group assignment** where team members contribu
 
 ---
 
-**Course**: [Your Course Name]  
-**Semester**: [Current Semester]  
-**Institution**: [Your School Name]
+**Course**: [COS 202]  
+**Semester**: [Second Semester]  
+**Institution**: [Federal University of Technology Owerri (FUTO)]
 
 _This project fulfills the requirements for demonstrating object-oriented programming concepts, data structures, and algorithm implementation in Java._
