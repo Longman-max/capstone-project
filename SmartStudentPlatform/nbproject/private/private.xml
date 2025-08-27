@@ -4,13 +4,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatformm/SmartStudentPlatform.java</file>
-            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/core/StudentManager.java</file>
-            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/model/Person.java</file>
-            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/model/Result.java</file>
             <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/model/Student.java</file>
+            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/model/Course.java</file>
+            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/model/Identifiable.java</file>
+            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/model/Result.java</file>
+            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/model/Person.java</file>
+            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/util/Algorithms.java</file>
             <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/ui/MainFrame.java</file>
             <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/util/FileManager.java</file>
-            <file>file:/C:/Users/Hp/Desktop/workspace/projects/cap-stone-project/SmartStudentPlatform/src/smartstudentplatform/model/Course.java</file>
         </group>
     </open-files>
 </project-private>

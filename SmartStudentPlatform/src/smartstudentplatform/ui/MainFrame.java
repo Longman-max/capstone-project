@@ -38,15 +38,15 @@ public class MainFrame extends JFrame {
     private final JLabel statusLabel = new JLabel("Ready");
 
     public MainFrame() {
-        super("Smart Student Platform - Student Management System");
+        super("Smart Student Platform - Student Management System by Group 1");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 700);
         setLocationRelativeTo(null);
-        
+
         initializeComponents();
         layoutComponents();
         setJMenuBar(buildMenuBar());
-        
+
         updateStatus("Application started");
     }
 
@@ -55,50 +55,49 @@ public class MainFrame extends JFrame {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.getTableHeader().setReorderingAllowed(false);
         table.setRowHeight(25);
-        
+
         // Configure summary area
         summaryArea.setEditable(false);
         summaryArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         summaryArea.setBackground(new Color(248, 248, 248));
-        
+
         // Configure status bar
-        statusLabel.setBorder(new EmptyBorder(5, 10, 5, 10));
         statusLabel.setOpaque(true);
         statusLabel.setBackground(new Color(240, 240, 240));
     }
 
     private void layoutComponents() {
         setLayout(new BorderLayout(10, 10));
-        
+
         // Main content area with padding
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        
+
         // Left side - Student management
         JPanel leftPanel = new JPanel(new BorderLayout(5, 5));
         leftPanel.add(createStudentFormPanel(), BorderLayout.NORTH);
         leftPanel.add(createTablePanel(), BorderLayout.CENTER);
         leftPanel.add(createSearchSortPanel(), BorderLayout.SOUTH);
-        
+
         // Right side - Results and summary
         JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
         rightPanel.setPreferredSize(new Dimension(350, 0));
         rightPanel.add(createResultsPanel(), BorderLayout.NORTH);
         rightPanel.add(createSummaryPanel(), BorderLayout.CENTER);
         rightPanel.add(createAnalyticsPanel(), BorderLayout.SOUTH);
-        
+
         mainPanel.add(leftPanel, BorderLayout.CENTER);
         mainPanel.add(rightPanel, BorderLayout.EAST);
-        
+
         add(mainPanel, BorderLayout.CENTER);
-        add(statusLabel, BorderLayout.SOUTH);
+        add(createGlobalControlPanel(), BorderLayout.SOUTH);
     }
 
     private JPanel createStudentFormPanel() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(), "Student Management", 
-            0, 0, new Font("SansSerif", Font.BOLD, 12)));
+                BorderFactory.createEtchedBorder(), "Student Management",
+                0, 0, new Font("SansSerif", Font.BOLD, 12)));
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -121,16 +120,16 @@ public class MainFrame extends JFrame {
 
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        
+
         JButton addBtn = createStyledButton("Add Student", new Color(34, 139, 34));
         addBtn.addActionListener(this::onAdd);
-        
+
         JButton updateBtn = createStyledButton("Update CGPA", new Color(30, 144, 255));
         updateBtn.addActionListener(this::onUpdateCgpa);
-        
+
         JButton deleteBtn = createStyledButton("Delete Student", new Color(220, 20, 60));
         deleteBtn.addActionListener(this::onDelete);
-        
+
         buttonPanel.add(addBtn);
         buttonPanel.add(updateBtn);
         buttonPanel.add(deleteBtn);
@@ -144,8 +143,8 @@ public class MainFrame extends JFrame {
     private JPanel createTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(), "Student Records", 
-            0, 0, new Font("SansSerif", Font.BOLD, 12)));
+                BorderFactory.createEtchedBorder(), "Student Records",
+                0, 0, new Font("SansSerif", Font.BOLD, 12)));
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(0, 300));
@@ -157,8 +156,8 @@ public class MainFrame extends JFrame {
     private JPanel createSearchSortPanel() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(), "Search & Sort Options", 
-            0, 0, new Font("SansSerif", Font.BOLD, 12)));
+                BorderFactory.createEtchedBorder(), "Search & Sort Options",
+                0, 0, new Font("SansSerif", Font.BOLD, 12)));
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -166,7 +165,7 @@ public class MainFrame extends JFrame {
         // Search section
         gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
         panel.add(new JLabel("Search by ID:"), gbc);
-        
+
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
         panel.add(searchIdField, gbc);
 
@@ -184,15 +183,15 @@ public class MainFrame extends JFrame {
         // Sort section
         JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         sortPanel.add(new JLabel("Sort by:"));
-        
+
         JButton sortNameBtn = createStyledButton("Name", new Color(138, 43, 226));
         JButton sortCgpaBtn = createStyledButton("CGPA", new Color(138, 43, 226));
         JButton sortIdBtn = createStyledButton("ID", new Color(138, 43, 226));
-        
+
         sortNameBtn.addActionListener(e -> { manager.sortByNameQuick(); refreshTable(); updateStatus("Sorted by name"); });
         sortCgpaBtn.addActionListener(e -> { manager.sortByCgpaBubbleDesc(); refreshTable(); updateStatus("Sorted by CGPA"); });
         sortIdBtn.addActionListener(e -> { manager.sortByIdInsertion(); refreshTable(); updateStatus("Sorted by ID"); });
-        
+
         sortPanel.add(sortNameBtn);
         sortPanel.add(sortCgpaBtn);
         sortPanel.add(sortIdBtn);
@@ -206,31 +205,13 @@ public class MainFrame extends JFrame {
     private JPanel createResultsPanel() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(), "Course Results", 
-            0, 0, new Font("SansSerif", Font.BOLD, 12)));
+                BorderFactory.createEtchedBorder(), "Course Results",
+                0, 0, new Font("SansSerif", Font.BOLD, 12)));
 
         JButton addResultBtn = createStyledButton("Add Course Result", new Color(70, 130, 180));
         addResultBtn.addActionListener(this::onAddResult);
         
-        JPanel filePanel = new JPanel(new GridLayout(2, 2, 5, 5));
-        
-        JButton saveStudentsBtn = createStyledButton("Save Students", new Color(60, 179, 113));
-        JButton loadStudentsBtn = createStyledButton("Load Students", new Color(60, 179, 113));
-        JButton saveResultsBtn = createStyledButton("Save Results", new Color(60, 179, 113));
-        JButton loadResultsBtn = createStyledButton("Load Results", new Color(60, 179, 113));
-        
-        saveStudentsBtn.addActionListener(this::onSaveStudents);
-        loadStudentsBtn.addActionListener(this::onLoadStudents);
-        saveResultsBtn.addActionListener(this::onSaveResults);
-        loadResultsBtn.addActionListener(this::onLoadResults);
-        
-        filePanel.add(saveStudentsBtn);
-        filePanel.add(loadStudentsBtn);
-        filePanel.add(saveResultsBtn);
-        filePanel.add(loadResultsBtn);
-
         panel.add(addResultBtn, BorderLayout.NORTH);
-        panel.add(filePanel, BorderLayout.CENTER);
 
         return panel;
     }
@@ -238,8 +219,8 @@ public class MainFrame extends JFrame {
     private JPanel createSummaryPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(), "Activity Log", 
-            0, 0, new Font("SansSerif", Font.BOLD, 12)));
+                BorderFactory.createEtchedBorder(), "Activity Log",
+                0, 0, new Font("SansSerif", Font.BOLD, 12)));
 
         JScrollPane scrollPane = new JScrollPane(summaryArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -255,18 +236,40 @@ public class MainFrame extends JFrame {
     private JPanel createAnalyticsPanel() {
         JPanel panel = new JPanel(new GridLayout(2, 1, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(), "Analytics", 
-            0, 0, new Font("SansSerif", Font.BOLD, 12)));
+                BorderFactory.createEtchedBorder(), "Analytics",
+                0, 0, new Font("SansSerif", Font.BOLD, 12)));
 
         JButton classAvgBtn = createStyledButton("Class Average", new Color(255, 165, 0));
         JButton topPerformerBtn = createStyledButton("Top Performer", new Color(255, 165, 0));
-        
+
         classAvgBtn.addActionListener(this::onClassAverage);
         topPerformerBtn.addActionListener(this::onTopPerformer);
 
         panel.add(classAvgBtn);
         panel.add(topPerformerBtn);
 
+        return panel;
+    }
+
+    private JPanel createGlobalControlPanel() {
+        JPanel panel = new JPanel(new BorderLayout(10, 0));
+        panel.setBorder(new EmptyBorder(5, 10, 5, 10));
+        panel.setBackground(new Color(240, 240, 240));
+
+        panel.add(statusLabel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        buttonPanel.setOpaque(false);
+        JButton saveBtn = createStyledButton("Save File", new Color(34, 139, 34));
+        JButton loadBtn = createStyledButton("Load File", new Color(30, 144, 255));
+
+        saveBtn.addActionListener(this::onSaveAll);
+        loadBtn.addActionListener(this::onLoadAll);
+
+        buttonPanel.add(saveBtn);
+        buttonPanel.add(loadBtn);
+
+        panel.add(buttonPanel, BorderLayout.EAST);
         return panel;
     }
 
@@ -282,33 +285,23 @@ public class MainFrame extends JFrame {
 
     private JMenuBar buildMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic('F');
-        
-        JMenuItem saveStudentsItem = new JMenuItem("Save Students...");
-        saveStudentsItem.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
-        saveStudentsItem.addActionListener(this::onSaveStudents);
-        
-        JMenuItem loadStudentsItem = new JMenuItem("Load Students...");
-        loadStudentsItem.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
-        loadStudentsItem.addActionListener(this::onLoadStudents);
-        
-        JMenuItem saveResultsItem = new JMenuItem("Save Results...");
-        saveResultsItem.addActionListener(this::onSaveResults);
-        
-        JMenuItem loadResultsItem = new JMenuItem("Load Results...");
-        loadResultsItem.addActionListener(this::onLoadResults);
-        
+
+        JMenuItem saveAllItem = new JMenuItem("Save All Data...");
+        saveAllItem.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
+        saveAllItem.addActionListener(this::onSaveAll);
+
+        JMenuItem loadAllItem = new JMenuItem("Load All Data...");
+        loadAllItem.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
+        loadAllItem.addActionListener(this::onLoadAll);
+
         JMenuItem exitItem = new JMenuItem("Exit");
         exitItem.setAccelerator(KeyStroke.getKeyStroke("ctrl Q"));
         exitItem.addActionListener(e -> System.exit(0));
 
-        fileMenu.add(saveStudentsItem);
-        fileMenu.add(loadStudentsItem);
-        fileMenu.addSeparator();
-        fileMenu.add(saveResultsItem);
-        fileMenu.add(loadResultsItem);
+        fileMenu.add(saveAllItem);
+        fileMenu.add(loadAllItem);
         fileMenu.addSeparator();
         fileMenu.add(exitItem);
 
@@ -316,60 +309,29 @@ public class MainFrame extends JFrame {
         return menuBar;
     }
 
-    /* ---------- Event handlers ---------- */
-    private void onSaveStudents(ActionEvent e) {
-        chooseAndDo("Save Students", true, f -> {
-            try { 
-                FileManager.saveStudents(manager, f); 
-                updateStatus("Students saved to " + f.getName());
-                updateSummary("✓ Saved students to " + f.getName());
-            }
-            catch (Exception ex) { 
-                error("Save failed: " + ex.getMessage()); 
+    private void onSaveAll(ActionEvent e) {
+        chooseAndDo("Save All Application Data", true, f -> {
+            try {
+                FileManager.saveAllData(manager, f);
+                updateStatus("All data saved to " + f.getName());
+                updateSummary("✓ Saved all data to " + f.getName());
+            } catch (Exception ex) {
+                error("Save failed: " + ex.getMessage());
                 updateStatus("Save failed");
             }
         });
     }
 
-    private void onLoadStudents(ActionEvent e) {
-        chooseAndDo("Load Students", false, f -> {
-            try { 
-                FileManager.loadStudents(manager, f); 
-                refreshTable(); 
-                updateStatus("Students loaded from " + f.getName());
-                updateSummary("✓ Loaded students from " + f.getName());
-            }
-            catch (Exception ex) { 
-                error("Load failed: " + ex.getMessage()); 
-                updateStatus("Load failed");
-            }
-        });
-    }
-
-    private void onSaveResults(ActionEvent e) {
-        chooseAndDo("Save Results", true, f -> {
-            try { 
-                FileManager.saveResults(manager, f); 
-                updateStatus("Results saved to " + f.getName());
-                updateSummary("✓ Saved results to " + f.getName());
-            }
-            catch (Exception ex) { 
-                error("Save failed: " + ex.getMessage()); 
-                updateStatus("Save failed");
-            }
-        });
-    }
-
-    private void onLoadResults(ActionEvent e) {
-        chooseAndDo("Load Results", false, f -> {
-            try { 
-                FileManager.loadResults(manager, f); 
-                refreshTable(); 
-                updateStatus("Results loaded from " + f.getName());
-                updateSummary("✓ Loaded results from " + f.getName());
-            }
-            catch (Exception ex) { 
-                error("Load failed: " + ex.getMessage()); 
+    private void onLoadAll(ActionEvent e) {
+        chooseAndDo("Load All Application Data", false, f -> {
+            try {
+                FileManager.loadAllData(manager, f);
+                refreshTable();
+                updateStatus("All data loaded from " + f.getName());
+                updateSummary("✓ Loaded all data from " + f.getName());
+            } catch (Exception ex) {
+                ex.printStackTrace(); // Helpful for debugging load errors
+                error("Load failed: " + ex.getMessage());
                 updateStatus("Load failed");
             }
         });
@@ -384,11 +346,12 @@ public class MainFrame extends JFrame {
             error("Please fill all required fields (ID, Name, and CGPA).");
             return;
         }
+
         try {
             double cg = Double.parseDouble(cgTxt);
-            if (cg < 0 || cg > 5) { 
-                error("CGPA must be between 0 and 5"); 
-                return; 
+            if (cg < 0 || cg > 5) {
+                error("CGPA must be between 0 and 5");
+                return;
             }
             manager.addStudent(id, name, cg);
             refreshTable();
@@ -405,15 +368,15 @@ public class MainFrame extends JFrame {
     private void onUpdateCgpa(ActionEvent e) {
         String id = idField.getText().trim();
         String cgTxt = cgpaField.getText().trim();
-        if (id.isEmpty() || cgTxt.isEmpty()) { 
-            error("Provide Student ID and new CGPA"); 
-            return; 
+        if (id.isEmpty() || cgTxt.isEmpty()) {
+            error("Provide Student ID and new CGPA");
+            return;
         }
         try {
             double cg = Double.parseDouble(cgTxt);
-            if (cg < 0 || cg > 5) { 
-                error("CGPA must be between 0 and 5"); 
-                return; 
+            if (cg < 0 || cg > 5) {
+                error("CGPA must be between 0 and 5");
+                return;
             }
             manager.updateStudentCgpa(id, cg);
             refreshTable();
@@ -429,16 +392,16 @@ public class MainFrame extends JFrame {
 
     private void onDelete(ActionEvent e) {
         String id = idField.getText().trim();
-        if (id.isEmpty()) { 
-            error("Enter Student ID to delete."); 
-            return; 
+        if (id.isEmpty()) {
+            error("Enter Student ID to delete.");
+            return;
         }
-        
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "Are you sure you want to delete student with ID: " + id + "?", 
-            "Confirm Delete", 
-            JOptionPane.YES_NO_OPTION);
-            
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete student with ID: " + id + "?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION);
+
         if (confirm == JOptionPane.YES_OPTION) {
             manager.removeStudent(id);
             refreshTable();
@@ -450,13 +413,13 @@ public class MainFrame extends JFrame {
 
     private void onSearch(boolean binary) {
         String id = searchIdField.getText().trim();
-        if (id.isEmpty()) { 
-            error("Enter a Student ID to search."); 
-            return; 
+        if (id.isEmpty()) {
+            error("Enter a Student ID to search.");
+            return;
         }
         Student s = binary ? manager.binarySearch(id) : manager.linearSearch(id);
         String searchType = binary ? "Binary" : "Linear";
-        
+
         if (s == null) {
             info("No student found with ID: " + id);
             updateStatus("Search completed - No results");
@@ -484,13 +447,13 @@ public class MainFrame extends JFrame {
 
         gbc.gridx = 0; gbc.gridy = 0; panel.add(new JLabel("Course Code:"), gbc);
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(codeField, gbc);
-        
+
         gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; panel.add(new JLabel("Course Name:"), gbc);
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(nameField, gbc);
-        
+
         gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE; panel.add(new JLabel("Credits:"), gbc);
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(creditsField, gbc);
-        
+
         gbc.gridx = 0; gbc.gridy = 3; gbc.fill = GridBagConstraints.NONE; panel.add(new JLabel("Score (0-100):"), gbc);
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(scoreField, gbc);
 
@@ -500,12 +463,12 @@ public class MainFrame extends JFrame {
         try {
             int credits = Integer.parseInt(creditsField.getText().trim());
             double score = Double.parseDouble(scoreField.getText().trim());
-            
+
             if (score < 0 || score > 100) {
                 error("Score must be between 0 and 100");
                 return;
             }
-            
+
             Course course = new Course(codeField.getText().trim(), nameField.getText().trim(), credits);
             manager.addResult(id.trim(), course, score);
             refreshTable();
@@ -522,7 +485,7 @@ public class MainFrame extends JFrame {
     private void onClassAverage(ActionEvent e) {
         String course = JOptionPane.showInputDialog(this, "Enter Course Code (e.g., COS201):", "Class Average", JOptionPane.QUESTION_MESSAGE);
         if (course == null || course.trim().isEmpty()) return;
-        
+
         try {
             double avg = manager.classAverage(course.trim());
             String message = String.format("Class average for %s: %.2f", course.trim(), avg);
@@ -537,19 +500,19 @@ public class MainFrame extends JFrame {
 
     private void onTopPerformer(ActionEvent e) {
         Object[] options = {"By CGPA", "By Average Score", "Cancel"};
-        int choice = JOptionPane.showOptionDialog(this, 
-            "Select metric for top performer:", 
-            "Top Performer Analysis",
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.QUESTION_MESSAGE, 
-            null, options, options[0]);
-            
+        int choice = JOptionPane.showOptionDialog(this,
+                "Select metric for top performer:",
+                "Top Performer Analysis",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null, options, options[0]);
+
         if (choice == 2 || choice == JOptionPane.CLOSED_OPTION) return;
 
-        Optional<Student> student = (choice == 0) ? 
-            manager.topPerformerByCgpa() : 
-            manager.topPerformerByAvgScore();
-            
+        Optional<Student> student = (choice == 0) ?
+                manager.topPerformerByCgpa() :
+                manager.topPerformerByAvgScore();
+
         if (student.isPresent()) {
             String metric = (choice == 0) ? "CGPA" : "Average Score";
             String message = "Top performer by " + metric + ": " + student.get().display();
@@ -566,30 +529,30 @@ public class MainFrame extends JFrame {
     private void refreshTable() {
         tableModel.setRowCount(0);
         int studentCount = 0;
-        
+
         for (Student s : manager.getAll()) {
             studentCount++;
             if (s.getGrades().isEmpty()) {
                 tableModel.addRow(new Object[]{
-                    s.getId(), 
-                    s.getName(), 
-                    String.format("%.2f", s.getCgpa()), 
-                    "-", 
-                    "-"
+                        s.getId(),
+                        s.getName(),
+                        String.format("%.2f", s.getCgpa()),
+                        "-",
+                        "-"
                 });
             } else {
                 s.getGrades().forEach((courseCode, score) -> {
                     tableModel.addRow(new Object[]{
-                        s.getId(),
-                        s.getName(),
-                        String.format("%.2f", s.getCgpa()),
-                        courseCode,
-                        String.format("%.1f", score)
+                            s.getId(),
+                            s.getName(),
+                            String.format("%.2f", s.getCgpa()),
+                            courseCode,
+                            String.format("%.1f", score)
                     });
                 });
             }
         }
-        
+
         updateStatus("Displaying " + studentCount + " students with " + tableModel.getRowCount() + " total records");
     }
 
@@ -612,17 +575,22 @@ public class MainFrame extends JFrame {
         void run(File f);
     }
 
+    /**
+     * [UPDATED] Configured to handle CSV files.
+     */
     private void chooseAndDo(String title, boolean save, FileAction action) {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle(title);
-        
-        if (title.toLowerCase().contains("csv")) {
-            chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("CSV Files", "csv"));
-        }
-        
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("CSV Data Files (*.csv)", "csv"));
+
         int result = save ? chooser.showSaveDialog(this) : chooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            action.run(chooser.getSelectedFile());
+            File selectedFile = chooser.getSelectedFile();
+            // Automatically append the .csv extension if not present when saving
+            if (save && !selectedFile.getName().toLowerCase().endsWith(".csv")) {
+                selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".csv");
+            }
+            action.run(selectedFile);
         }
     }
 
