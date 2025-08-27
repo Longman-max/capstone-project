@@ -2,9 +2,9 @@ package smartstudentplatform.core;
 
 import smartstudentplatform.model.Student;
 import smartstudentplatform.model.Course;
-import smartstudentplatform.model.Result;
 import smartstudentplatform.util.Algorithms;
 
+import java.io.*;
 import java.util.*;
 
 public class StudentManager {
@@ -60,7 +60,6 @@ public class StudentManager {
     }
 
     /* -------- Summaries -------- */
-    // class average per courseCode, considering all students that have that course
     public double classAverage(String courseCode) {
         double sum = 0; int n = 0;
         for (Student s : students) {
@@ -71,12 +70,10 @@ public class StudentManager {
         return sum / n;
     }
 
-    // top performer by CGPA
     public Optional<Student> topPerformerByCgpa() {
         return students.stream().max(Comparator.comparingDouble(Student::getCgpa));
     }
 
-    // top performer by average score across all their courses
     public Optional<Student> topPerformerByAvgScore() {
         return students.stream().max(Comparator.comparingDouble(s -> {
             if (s.getGrades().isEmpty()) return -1; // treat as lowest
@@ -84,5 +81,36 @@ public class StudentManager {
             for (double v : s.getGrades().values()) sum += v;
             return sum / s.getGrades().size();
         }));
+    }
+
+    /* -------- CSV File Handling -------- */
+    public void saveToCSV(File file) throws IOException {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.append("ID,Name,CGPA\n"); // header
+            for (Student s : students) {
+                writer.append(s.getId()).append(",");
+                writer.append(s.getName()).append(",");
+                writer.append(String.valueOf(s.getCgpa())).append("\n");
+            }
+        }
+    }
+
+    public void loadFromCSV(File file) throws IOException {
+        students.clear();
+        indexById.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            boolean firstLine = true;
+            while ((line = br.readLine()) != null) {
+                if (firstLine) { firstLine = false; continue; } // skip header
+                String[] values = line.split(",");
+                if (values.length >= 3) {
+                    String id = values[0].trim();
+                    String name = values[1].trim();
+                    double cgpa = Double.parseDouble(values[2].trim());
+                    addStudent(new Student(id, name, cgpa));
+                }
+            }
+        }
     }
 }
