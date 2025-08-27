@@ -2,6 +2,10 @@
 
 A Java desktop application developed as a **school assignment** to demonstrate object-oriented programming concepts, data structures, and GUI development using Swing.
 
+<div style="text-align: center; margin-bottom: 10px;">
+    <img src="preview/project.png" alt="project-image" style="max-width: 400px;" />
+</div>
+
 ## 📋 Project Overview
 
 This is an **academic project** that implements a student management system showcasing key computer science concepts including:
