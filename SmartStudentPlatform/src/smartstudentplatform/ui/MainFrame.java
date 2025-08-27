@@ -37,24 +37,11 @@ public class MainFrame extends JFrame {
     // Status bar
     private final JLabel statusLabel = new JLabel("Ready");
 
-    // Color scheme
-    private static final Color PRIMARY = new Color(41, 128, 185);
-    private static final Color SUCCESS = new Color(46, 204, 113);
-    private static final Color WARNING = new Color(241, 196, 15);
-    private static final Color DANGER = new Color(231, 76, 60);
-    private static final Color LIGHT_GRAY = new Color(245, 245, 245);
-    private static final Color BORDER_COLOR = new Color(220, 220, 220);
-
     public MainFrame() {
-        super("Smart Student Platform");
+        super("Smart Student Platform - Student Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 700);
         setLocationRelativeTo(null);
-        
-        // Set modern look and feel
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeel());
-        } catch (Exception e) { /* Use default */ }
         
         initializeComponents();
         layoutComponents();
@@ -64,47 +51,38 @@ public class MainFrame extends JFrame {
     }
 
     private void initializeComponents() {
-        // Configure table with lighter styling
+        // Configure table
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.getTableHeader().setReorderingAllowed(false);
-        table.setRowHeight(28);
-        table.setShowVerticalLines(false);
-        table.setGridColor(BORDER_COLOR);
-        table.getTableHeader().setBackground(LIGHT_GRAY);
-        table.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_COLOR));
+        table.setRowHeight(25);
         
         // Configure summary area
         summaryArea.setEditable(false);
-        summaryArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        summaryArea.setBackground(Color.WHITE);
-        summaryArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+        summaryArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        summaryArea.setBackground(new Color(248, 248, 248));
         
         // Configure status bar
-        statusLabel.setBorder(new EmptyBorder(8, 15, 8, 15));
-        statusLabel.setBackground(LIGHT_GRAY);
+        statusLabel.setBorder(new EmptyBorder(5, 10, 5, 10));
         statusLabel.setOpaque(true);
-        statusLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        statusLabel.setBackground(new Color(240, 240, 240));
     }
 
     private void layoutComponents() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
         
-        // Main content with clean spacing
-        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
-        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
-        mainPanel.setBackground(Color.WHITE);
+        // Main content area with padding
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
         // Left side - Student management
-        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
-        leftPanel.setOpaque(false);
+        JPanel leftPanel = new JPanel(new BorderLayout(5, 5));
         leftPanel.add(createStudentFormPanel(), BorderLayout.NORTH);
         leftPanel.add(createTablePanel(), BorderLayout.CENTER);
         leftPanel.add(createSearchSortPanel(), BorderLayout.SOUTH);
         
-        // Right side - Compact panels
-        JPanel rightPanel = new JPanel(new BorderLayout(10, 10));
-        rightPanel.setPreferredSize(new Dimension(320, 0));
-        rightPanel.setOpaque(false);
+        // Right side - Results and summary
+        JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
+        rightPanel.setPreferredSize(new Dimension(350, 0));
         rightPanel.add(createResultsPanel(), BorderLayout.NORTH);
         rightPanel.add(createSummaryPanel(), BorderLayout.CENTER);
         rightPanel.add(createAnalyticsPanel(), BorderLayout.SOUTH);
@@ -117,39 +95,47 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel createStudentFormPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(createLightBorder("Student Management"));
-        panel.setBackground(Color.WHITE);
-        
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(), "Student Management", 
+            0, 0, new Font("SansSerif", Font.BOLD, 12)));
+        panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Form fields with cleaner layout
+        // Form fields
         gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
-        panel.add(createLabel("Student ID:"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 0.5;
-        panel.add(styleTextField(idField), gbc);
+        panel.add(new JLabel("Student ID:"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        panel.add(idField, gbc);
 
-        gbc.gridx = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0; gbc.insets.left = 15;
-        panel.add(createLabel("Full Name:"), gbc);
-        gbc.gridx = 3; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
-        panel.add(styleTextField(nameField), gbc);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        panel.add(new JLabel("Full Name:"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        panel.add(nameField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0; gbc.insets.left = 8;
-        panel.add(createLabel("CGPA (0-5):"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 0.5;
-        panel.add(styleTextField(cgpaField), gbc);
+        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        panel.add(new JLabel("CGPA (0-5):"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        panel.add(cgpaField, gbc);
 
-        // Compact button panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
-        buttonPanel.setOpaque(false);
+        // Buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         
-        buttonPanel.add(createButton("Add Student", SUCCESS, this::onAdd));
-        buttonPanel.add(createButton("Update CGPA", PRIMARY, this::onUpdateCgpa));
-        buttonPanel.add(createButton("Delete", DANGER, this::onDelete));
+        JButton addBtn = createStyledButton("Add Student", new Color(34, 139, 34));
+        addBtn.addActionListener(this::onAdd);
+        
+        JButton updateBtn = createStyledButton("Update CGPA", new Color(30, 144, 255));
+        updateBtn.addActionListener(this::onUpdateCgpa);
+        
+        JButton deleteBtn = createStyledButton("Delete Student", new Color(220, 20, 60));
+        deleteBtn.addActionListener(this::onDelete);
+        
+        buttonPanel.add(addBtn);
+        buttonPanel.add(updateBtn);
+        buttonPanel.add(deleteBtn);
 
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 4; gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets.top = 15;
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(buttonPanel, gbc);
 
         return panel;
@@ -157,192 +143,180 @@ public class MainFrame extends JFrame {
 
     private JPanel createTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(createLightBorder("Student Records"));
-        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(), "Student Records", 
+            0, 0, new Font("SansSerif", Font.BOLD, 12)));
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
-        scrollPane.getViewport().setBackground(Color.WHITE);
+        scrollPane.setPreferredSize(new Dimension(0, 300));
         panel.add(scrollPane, BorderLayout.CENTER);
 
         return panel;
     }
 
     private JPanel createSearchSortPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(createLightBorder("Search & Sort"));
-        panel.setBackground(Color.WHITE);
-        
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(), "Search & Sort Options", 
+            0, 0, new Font("SansSerif", Font.BOLD, 12)));
+        panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Search section - more compact
+        // Search section
         gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
-        panel.add(createLabel("Search ID:"), gbc);
+        panel.add(new JLabel("Search by ID:"), gbc);
         
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 0.3;
-        panel.add(styleTextField(searchIdField), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        panel.add(searchIdField, gbc);
 
-        gbc.gridx = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0; gbc.insets.left = 15;
-        JPanel searchBtnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        searchBtnPanel.setOpaque(false);
-        searchBtnPanel.add(createSmallButton("Linear", WARNING, e -> onSearch(false)));
-        searchBtnPanel.add(createSmallButton("Binary", WARNING, e -> onSearch(true)));
-        panel.add(searchBtnPanel, gbc);
+        JPanel searchButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        JButton linearSearchBtn = createStyledButton("Linear Search", new Color(255, 140, 0));
+        JButton binarySearchBtn = createStyledButton("Binary Search", new Color(255, 140, 0));
+        linearSearchBtn.addActionListener(e -> onSearch(false));
+        binarySearchBtn.addActionListener(e -> onSearch(true));
+        searchButtonPanel.add(linearSearchBtn);
+        searchButtonPanel.add(binarySearchBtn);
+
+        gbc.gridx = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        panel.add(searchButtonPanel, gbc);
 
         // Sort section
-        gbc.gridx = 0; gbc.gridy = 1; gbc.insets.left = 8; gbc.insets.top = 5;
-        panel.add(createLabel("Sort by:"), gbc);
-        
-        gbc.gridx = 1; gbc.gridwidth = 2; gbc.insets.left = 15;
         JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        sortPanel.setOpaque(false);
+        sortPanel.add(new JLabel("Sort by:"));
         
-        sortPanel.add(createSmallButton("Name", new Color(155, 89, 182), e -> { 
-            manager.sortByNameQuick(); refreshTable(); updateStatus("Sorted by name"); 
-        }));
-        sortPanel.add(createSmallButton("CGPA", new Color(155, 89, 182), e -> { 
-            manager.sortByCgpaBubbleDesc(); refreshTable(); updateStatus("Sorted by CGPA"); 
-        }));
-        sortPanel.add(createSmallButton("ID", new Color(155, 89, 182), e -> { 
-            manager.sortByIdInsertion(); refreshTable(); updateStatus("Sorted by ID"); 
-        }));
+        JButton sortNameBtn = createStyledButton("Name", new Color(138, 43, 226));
+        JButton sortCgpaBtn = createStyledButton("CGPA", new Color(138, 43, 226));
+        JButton sortIdBtn = createStyledButton("ID", new Color(138, 43, 226));
         
+        sortNameBtn.addActionListener(e -> { manager.sortByNameQuick(); refreshTable(); updateStatus("Sorted by name"); });
+        sortCgpaBtn.addActionListener(e -> { manager.sortByCgpaBubbleDesc(); refreshTable(); updateStatus("Sorted by CGPA"); });
+        sortIdBtn.addActionListener(e -> { manager.sortByIdInsertion(); refreshTable(); updateStatus("Sorted by ID"); });
+        
+        sortPanel.add(sortNameBtn);
+        sortPanel.add(sortCgpaBtn);
+        sortPanel.add(sortIdBtn);
+
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 3; gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(sortPanel, gbc);
 
         return panel;
     }
 
     private JPanel createResultsPanel() {
-        JPanel panel = new JPanel(new BorderLayout(8, 8));
-        panel.setBorder(createLightBorder("Course Results"));
-        panel.setBackground(Color.WHITE);
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(), "Course Results", 
+            0, 0, new Font("SansSerif", Font.BOLD, 12)));
 
-        panel.add(createButton("Add Course Result", new Color(52, 152, 219), this::onAddResult), BorderLayout.NORTH);
+        JButton addResultBtn = createStyledButton("Add Course Result", new Color(70, 130, 180));
+        addResultBtn.addActionListener(this::onAddResult);
         
         JPanel filePanel = new JPanel(new GridLayout(2, 2, 5, 5));
-        filePanel.setOpaque(false);
         
-        filePanel.add(createSmallButton("Save Students", SUCCESS, this::onSaveStudents));
-        filePanel.add(createSmallButton("Load Students", SUCCESS, this::onLoadStudents));
-        filePanel.add(createSmallButton("Save Results", SUCCESS, this::onSaveResults));
-        filePanel.add(createSmallButton("Load Results", SUCCESS, this::onLoadResults));
+        JButton saveStudentsBtn = createStyledButton("Save Students", new Color(60, 179, 113));
+        JButton loadStudentsBtn = createStyledButton("Load Students", new Color(60, 179, 113));
+        JButton saveResultsBtn = createStyledButton("Save Results", new Color(60, 179, 113));
+        JButton loadResultsBtn = createStyledButton("Load Results", new Color(60, 179, 113));
+        
+        saveStudentsBtn.addActionListener(this::onSaveStudents);
+        loadStudentsBtn.addActionListener(this::onLoadStudents);
+        saveResultsBtn.addActionListener(this::onSaveResults);
+        loadResultsBtn.addActionListener(this::onLoadResults);
+        
+        filePanel.add(saveStudentsBtn);
+        filePanel.add(loadStudentsBtn);
+        filePanel.add(saveResultsBtn);
+        filePanel.add(loadResultsBtn);
 
+        panel.add(addResultBtn, BorderLayout.NORTH);
         panel.add(filePanel, BorderLayout.CENTER);
+
         return panel;
     }
 
     private JPanel createSummaryPanel() {
-        JPanel panel = new JPanel(new BorderLayout(5, 5));
-        panel.setBorder(createLightBorder("Activity Log"));
-        panel.setBackground(Color.WHITE);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(), "Activity Log", 
+            0, 0, new Font("SansSerif", Font.BOLD, 12)));
 
         JScrollPane scrollPane = new JScrollPane(summaryArea);
-        scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        JButton clearBtn = createSmallButton("Clear Log", new Color(149, 165, 166), 
-            e -> { summaryArea.setText(""); updateStatus("Log cleared"); });
-        panel.add(clearBtn, BorderLayout.SOUTH);
+        JButton clearLogBtn = createStyledButton("Clear Log", new Color(192, 192, 192));
+        clearLogBtn.addActionListener(e -> { summaryArea.setText(""); updateStatus("Log cleared"); });
+        panel.add(clearLogBtn, BorderLayout.SOUTH);
 
         return panel;
     }
 
     private JPanel createAnalyticsPanel() {
-        JPanel panel = new JPanel(new GridLayout(1, 2, 8, 0));
-        panel.setBorder(createLightBorder("Analytics"));
-        panel.setBackground(Color.WHITE);
+        JPanel panel = new JPanel(new GridLayout(2, 1, 5, 5));
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(), "Analytics", 
+            0, 0, new Font("SansSerif", Font.BOLD, 12)));
 
-        panel.add(createButton("Class Average", new Color(230, 126, 34), this::onClassAverage));
-        panel.add(createButton("Top Performer", new Color(230, 126, 34), this::onTopPerformer));
+        JButton classAvgBtn = createStyledButton("Class Average", new Color(255, 165, 0));
+        JButton topPerformerBtn = createStyledButton("Top Performer", new Color(255, 165, 0));
+        
+        classAvgBtn.addActionListener(this::onClassAverage);
+        topPerformerBtn.addActionListener(this::onTopPerformer);
+
+        panel.add(classAvgBtn);
+        panel.add(topPerformerBtn);
 
         return panel;
     }
 
-    // Helper methods for cleaner UI components
-    private JLabel createLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        label.setForeground(new Color(52, 73, 94));
-        return label;
-    }
-
-    private JTextField styleTextField(JTextField field) {
-        field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(BORDER_COLOR),
-            new EmptyBorder(5, 8, 5, 8)
-        ));
-        field.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        return field;
-    }
-
-    private JButton createButton(String text, Color color, java.awt.event.ActionListener action) {
+    private JButton createStyledButton(String text, Color color) {
         JButton button = new JButton(text);
         button.setBackground(color);
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-        button.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.addActionListener(action);
+        button.setBorderPainted(false);
+        button.setFont(new Font("SansSerif", Font.BOLD, 11));
         return button;
-    }
-
-    private JButton createSmallButton(String text, Color color, java.awt.event.ActionListener action) {
-        JButton button = new JButton(text);
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
-        button.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.addActionListener(action);
-        return button;
-    }
-
-    private javax.swing.border.Border createLightBorder(String title) {
-        return BorderFactory.createTitledBorder(
-            BorderFactory.createLineBorder(BORDER_COLOR), 
-            title,
-            javax.swing.border.TitledBorder.LEFT,
-            javax.swing.border.TitledBorder.TOP,
-            new Font("SansSerif", Font.PLAIN, 12),
-            new Color(52, 73, 94)
-        );
     }
 
     private JMenuBar buildMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        menuBar.setBackground(Color.WHITE);
-        menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_COLOR));
         
         JMenu fileMenu = new JMenu("File");
-        fileMenu.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        fileMenu.setMnemonic('F');
         
-        fileMenu.add(createMenuItem("Save Students...", "ctrl S", this::onSaveStudents));
-        fileMenu.add(createMenuItem("Load Students...", "ctrl O", this::onLoadStudents));
+        JMenuItem saveStudentsItem = new JMenuItem("Save Students...");
+        saveStudentsItem.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
+        saveStudentsItem.addActionListener(this::onSaveStudents);
+        
+        JMenuItem loadStudentsItem = new JMenuItem("Load Students...");
+        loadStudentsItem.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
+        loadStudentsItem.addActionListener(this::onLoadStudents);
+        
+        JMenuItem saveResultsItem = new JMenuItem("Save Results...");
+        saveResultsItem.addActionListener(this::onSaveResults);
+        
+        JMenuItem loadResultsItem = new JMenuItem("Load Results...");
+        loadResultsItem.addActionListener(this::onLoadResults);
+        
+        JMenuItem exitItem = new JMenuItem("Exit");
+        exitItem.setAccelerator(KeyStroke.getKeyStroke("ctrl Q"));
+        exitItem.addActionListener(e -> System.exit(0));
+
+        fileMenu.add(saveStudentsItem);
+        fileMenu.add(loadStudentsItem);
         fileMenu.addSeparator();
-        fileMenu.add(createMenuItem("Save Results...", null, this::onSaveResults));
-        fileMenu.add(createMenuItem("Load Results...", null, this::onLoadResults));
+        fileMenu.add(saveResultsItem);
+        fileMenu.add(loadResultsItem);
         fileMenu.addSeparator();
-        fileMenu.add(createMenuItem("Exit", "ctrl Q", e -> System.exit(0)));
+        fileMenu.add(exitItem);
 
         menuBar.add(fileMenu);
         return menuBar;
     }
 
-    private JMenuItem createMenuItem(String text, String accelerator, java.awt.event.ActionListener action) {
-        JMenuItem item = new JMenuItem(text);
-        item.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        if (accelerator != null) {
-            item.setAccelerator(KeyStroke.getKeyStroke(accelerator));
-        }
-        item.addActionListener(action);
-        return item;
-    }
-
-    /* ---------- Event handlers (unchanged functionality) ---------- */
+    /* ---------- Event handlers ---------- */
     private void onSaveStudents(ActionEvent e) {
         chooseAndDo("Save Students", true, f -> {
             try { 
@@ -504,22 +478,21 @@ public class MainFrame extends JFrame {
         JTextField scoreField = new JTextField();
 
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        gbc.gridx = 0; gbc.gridy = 0; panel.add(createLabel("Course Code:"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(styleTextField(codeField), gbc);
+        gbc.gridx = 0; gbc.gridy = 0; panel.add(new JLabel("Course Code:"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(codeField, gbc);
         
-        gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; panel.add(createLabel("Course Name:"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(styleTextField(nameField), gbc);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; panel.add(new JLabel("Course Name:"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(nameField, gbc);
         
-        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE; panel.add(createLabel("Credits:"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(styleTextField(creditsField), gbc);
+        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE; panel.add(new JLabel("Credits:"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(creditsField, gbc);
         
-        gbc.gridx = 0; gbc.gridy = 3; gbc.fill = GridBagConstraints.NONE; panel.add(createLabel("Score (0-100):"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(styleTextField(scoreField), gbc);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.fill = GridBagConstraints.NONE; panel.add(new JLabel("Score (0-100):"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; panel.add(scoreField, gbc);
 
         int result = JOptionPane.showConfirmDialog(this, panel, "Add Course Result", JOptionPane.OK_CANCEL_OPTION);
         if (result != JOptionPane.OK_OPTION) return;
